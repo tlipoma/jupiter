@@ -1,5 +1,6 @@
 import requests
 from BeautifulSoup import BeautifulStoneSoup as soup
+import dateutil.parser
 
 RECENT_METAR_URL = 'https://aviationweather.gov/adds/dataserver_current/httpparam?dataSource=metars&requestType=retrieve&format=xml&hoursBeforeNow=3&mostRecent=true&stationString=PHNL%20'
 
@@ -11,7 +12,8 @@ def get_station_data(station_id):
 	weather = {}
 	try:
 		s = soup(r.content)
-		weather['time'] = s.observation_time.string
+		weather['station'] = station_id
+		weather['time'] = dateutil.parser.parse(s.observation_time.string)
 		weather['temp'] = float(s.temp_c.string)
 		weather['dewpoint'] = float(s.dewpoint_c.string)
 		weather['wind_dir'] = int(s.wind_dir_degrees.string)
@@ -22,7 +24,7 @@ def get_station_data(station_id):
 		else:
 			wind_gust = 0
 		weather['wind_gust'] = wind_gust
-		weather['pressure'] = float(s.sea_level_pressure_mb.string)
+		weather['pressure'] = float(s.altim_in_hg.string)
 		precip = s.pcp6hr_in
 		if precip:
 			precip = float(precip.string)
