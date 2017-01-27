@@ -27,6 +27,8 @@ class WeatherDB():
 		metar = {}
 		try:
 			metar['station'] = met_dic['station']
+			metar['latitude'] = met_dic['latitude']
+			metar['longitude'] = met_dic['longitude']
 			metar['temperature'] = met_dic['temp']
 			metar['dewpoint'] = met_dic['dewpoint']
 			metar['windDirection'] = met_dic['wind_dir']
